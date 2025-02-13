@@ -42,9 +42,14 @@ int _getLen(ListTemplate * list) {
 }
 
 ListLink * _getLink(ListTemplate * list, int index) {
+    if ((index >= list->size) || index < 0) {
+        printf("ERROR: Could not get link at %d, index out of range\n", index);
+        return NULL;
+    }
+
     if (index > (list->size / 2)) {
         ListLink * place = list->tail;
-        for (int i = 0; i < list->size - index; i++) {
+        for (int i = 0; i < list->size - index - 1; i++) {
             place = place->prev;
         }
         return place;
@@ -84,23 +89,26 @@ void _insert(ListTemplate * list, void * value, int index) {
     }
 
     ListLink * newLink = _createLink(value);
-    list->size++;
+    
 
     if (list->size == 0) {
         list->head = newLink;
         list->tail = newLink;
+        list->size++;
         return;
     }
 
     if (index == 0) {
         _chainTogether(newLink, list->head);
         list->head = newLink->next;
+        list->size++;
         return;
     }
 
     if (index == list->size) {
         _chainTogether(list->tail, newLink);
         list->tail = newLink;
+        list->size++;
         return;
     }
 
@@ -108,6 +116,7 @@ void _insert(ListTemplate * list, void * value, int index) {
     ListLink * after = before->next;
     _chainTogether(before, newLink);
     _chainTogether(newLink, after);
+    list->size++;
     return;
 }
 
