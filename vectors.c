@@ -74,7 +74,9 @@ void * _pop(ListTemplate * list) {
     ListLink * link = list->head;
     list->head = link->next;
     list->size--;
-    list->head->prev = NULL;
+    if (list->head != NULL) {
+        list->head->prev = NULL;
+    }
     
     void * value = link->value;
     free(link);
